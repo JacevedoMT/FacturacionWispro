@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión de Pagos</title>
+    <link rel="shortcut icon" href="/imagen/Favicon.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uuid@8.3.2/dist/umd/uuid.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/Style/pagos.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-light bg-dark">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="/imagen/logo.png" alt="" width="255" height="55">
+                <span class="text-white ms-3 h4 text-center">Sistema de Gestión de Pagos</span>
+            </a>
+        </div>
+    </nav>
+
+    <nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home"
+                type="button" role="tab" aria-controls="nav-home" aria-selected="true">Inicio</button>
+            <button class="nav-link" id="nav-cash-control-tab" data-bs-toggle="tab" data-bs-target="#nav-cash-control"
+                type="button" role="tab" aria-controls="nav-cash-control" aria-selected="false">Caja</button>
+            <button class="nav-link" id="nav-payment-control-tab" data-bs-toggle="tab"
+                data-bs-target="#nav-payment-control" type="button" role="tab" aria-controls="nav-payment-control"
+                aria-selected="false">Historial de Pagos</button>
+            <button class="nav-link" id="nav-users-tab" data-bs-toggle="tab" data-bs-target="#nav-users" type="button"
+                role="tab" aria-controls="nav-users" aria-selected="false">Mi Usuario</button>
+            <button class="nav-link" id="nav-about-tab" data-bs-toggle="tab" data-bs-target="#nav-about" type="button"
+                role="tab" aria-controls="nav-about" aria-selected="false">Acerca de</button>
+        </div>
+    </nav>
+
+    <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <!-- Contenido para Inicio -->
+        </div>
+        <div class="tab-pane fade" id="nav-cash-control" role="tabpanel" aria-labelledby="nav-cash-control-tab">
+            <div class="container-fluid mt-2">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="total-box">
+                            <h2 class="mb-2">Lista de Facturas Pendientes</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-8">
+                        <div class="total-box mb-3">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-striped" id="invoiceTable">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Número de Factura</th>
+                                            <th>Fecha de Emisión</th>
+                                            <th>Identidad</th>
+                                            <th>Cliente</th>
+                                            <th>Periodo</th>
+                                            <th>Estado</th>
+                                            <th>Saldo</th>
+                                            <th>Acción</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="invoiceTableBody">
+                                        <!-- Los datos de las facturas serán añadidos aquí por JavaScript -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="total-box mb-3">
+                            <h3>Control de Caja</h3>
+                            <form id="cashControlForm">
+                                <div class="mb-3">
+                                    <button type="button" class="btn btn-primary" id="startDayBtn">Iniciar Día</button>
+                                    <button type="button" class="btn btn-danger" id="endDayBtn">Cerrar Día</button>
+                                </div>
+                                <div class="mb-3">
+                                    <h5>Totales del Día</h5>
+                                    <div class="totals text-center mb-3">
+                                        <div class="total-box">
+                                            <h5>Total en Efectivo</h5>
+                                            <h1 id="cashTotal" class="highlighted-label">L.0.00</h1>
+                                        </div>
+                                    </div>
+                                    <div class="totals text-center mb-3">
+                                        <div class="total-box">
+                                            <h5>Total en Tarjeta</h5>
+                                            <h1 id="cardTotal" class="highlighted-label">L.0.00</h1>
+                                        </div>
+                                    </div>
+                                    <div class="totals text-center">
+                                        <div class="total-box">
+                                            <h5>Total General</h5>
+                                            <h1 id="generalTotal" class="highlighted-label">L.0.00</h1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="total-box" id="dayClosure" style="display: none;">
+                            <h4>Cierre del Día</h4>
+                            <div class="totals text-center mb-3">
+                                <div class="closure-box">
+                                    <h5>Saldo Inicial</h5>
+                                    <h1 id="initialBalance" class="closure-label">L.0.00</h1>
+                                </div>
+                            </div>
+                            <div class="totals text-center mb-3">
+                                <div class="closure-box">
+                                    <h5>Total General</h5>
+                                    <h1 id="totalGeneralTransactions" class="closure-label">L.0.00</h1>
+                                </div>
+                            </div>
+                            <div class="totals text-center mb-3">
+                                <div class="closure-box">
+                                    <h5>Total de Transacciones en Efectivo</h5>
+                                    <h1 id="numCashTransactions" class="closure-label">0</h1>
+                                </div>
+                            </div>
+                            <div class="totals text-center mb-3">
+                                <div class="closure-box">
+                                    <h5>Total de Transacciones con Tarjeta</h5>
+                                    <h1 id="numCardTransactions" class="closure-label">0</h1>
+                                </div>
+                            </div>
+                            <div class="totals text-center mb-3">
+                                <div class="closure-box">
+                                    <h5>Total de Transacciones Generales</h1>
+                                    <h1 id="numGeneralTransactions" class="closure-label">0</h1>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="button" class="btn btn-success" id="saveClosureBtn">Guardar Cierre de Caja</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="nav-payment-control" role="tabpanel" aria-labelledby="nav-payment-control-tab">
+            <!-- Contenido para Control de Pagos -->
+        </div>
+        <div class="tab-pane fade" id="nav-users" role="tabpanel" aria-labelledby="nav-users-tab">
+            <!-- Contenido para Usuarios -->
+        </div>
+        <div class="tab-pane fade" id="nav-about" role="tabpanel" aria-labelledby="nav-about-tab">
+            <!-- Contenido para Acerca de -->
+            <div class="container mt-5">
+                <div class="closure-box">
+                    <div class="text-center">
+                        <img src="/imagen/logo2.png" alt="Logo de la Empresa" width="400" height="135">
+                        <h3 class="mt-3">Departamento de Infraestructura Tecnológica</h3>
+                        <p class="mt-2">Versión del Sistema: 1.0.0</p>
+                        <p class="mt-2">Correo: <a href="mailto:it@metornethn.com">it@metornethn.com</a></p>
+                        <p class="mt-2">Teléfono de Soporte: +504 9454-0136</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para ingresar saldo inicial -->
+    <div class="modal fade" id="initialBalanceModal" tabindex="-1" aria-labelledby="initialBalanceModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="initialBalanceModalLabel">Ingresar Saldo Inicial</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="initialBalanceForm">
+                        <div class="mb-3">
+                            <label for="initial_balance_modal" class="form-label">Saldo Inicial</label>
+                            <input type="number" class="form-control" id="initial_balance_modal" name="initial_balance_modal" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para enviar pago -->
+    <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="invoice-header">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <span class="invoice-title">Factura</span>
+                        </div>
+                        <div class="col-md-6 text-end">
+                            <span class="invoice-info">Fecha: <span id="invoice-date"></span></span>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body invoice-body">
+                    <form id="paymentForm">
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="client_id" class="form-label">Id del Cliente en Wispro</label>
+                                <input type="text" class="form-control" id="client_id" name="client_id" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="client_name" class="form-label">Nombre del Cliente</label>
+                                <input type="text" class="form-control" id="client_name" readonly>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="invoice_ids" class="form-label">Código de Factura en Wispro</label>
+                                <input type="text" class="form-control" id="invoice_ids" name="invoice_ids" readonly>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="rtn" class="form-label">RTN</label>
+                                <input type="text" class="form-control" id="rtn" name="rtn">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <label for="comment" class="form-label">Comentario</label>
+                                <textarea class="form-control" id="comment" name="comment" rows="3"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="payment_method" class="form-label">Método de Pago</label>
+                                <select class="form-select" id="payment_method" name="payment_method">
+                                    <option value="cash">Selecione una Opcion...</option>
+                                    <option value="cash">Efectivo</option>
+                                    <option value="credit">Tarjeta de Crédito</option>
+                                    <option value="debit">Tarjeta de Débito</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6" id="cash_amount_container" style="display: none;">
+                                <label for="cash_amount" class="form-label">Monto Recibido</label>
+                                <input type="number" class="form-control" id="cash_amount" name="cash_amount">
+                                <div class="text-end mt-2">
+                                    <label id="change" class="form-label">Vuelto: L.0.00</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-4 text-center">
+                                <label class="form-label">Sub Total</label>
+                                <label id="sub_total" class="subtotal-label"></label>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <label class="form-label">Impuesto 15%</label>
+                                <label id="tax" class="tax-label"></label>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <label class="form-label">Monto a pagar</label>
+                                <label id="amount" class="amount-label"></label>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <p class="text-muted">Revise los datos de la factura antes de proceder con el pago.</p>
+                    <button type="submit" class="btn btn-primary" form="paymentForm">Enviar Pago</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedor para toasts -->
+    <div id="toastContainer" aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+        <!-- Toast -->
+        <div id="notificationToast" class="toast align-items-center text-white border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+            <div class="d-flex">
+                <div class="toast-body">
+                    Hello, world! This is a toast message.
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/pago.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,86 @@
+#toastContainer {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1050;
+}
+
+.amount-label,
+.subtotal-label,
+.tax-label {
+    font-size: 2.5rem;
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.amount-label {
+    color: #007bff;
+}
+
+.subtotal-label {
+    color: #000;
+}
+
+.tax-label {
+    color: #ff0000;
+}
+
+.invoice-header {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-bottom: 2px solid #dee2e6;
+    margin-bottom: 20px;
+}
+
+.invoice-title {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.invoice-info {
+    font-size: 1rem;
+}
+
+.invoice-body {
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.highlighted-label {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #007bff;
+}
+
+.total-box {
+    background-color: #f8f9fa;
+    border: 2px solid #dee2e6;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.closure-box {
+    background-color: #e9ecef;
+    border: 2px solid #adb5bd;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.closure-label {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #495057;
+}
+
+.totals {
+    margin: 5px 0;
+}
+
+.totals h5 {
+    font-size: 1.2rem;
+    color: #6c757d;
+}
